@@ -1,0 +1,6 @@
+.env
+*.sql.dump
+*.sql.gz
+**/logs/**
+**/temp/**
+**/work/**
