@@ -39,5 +39,5 @@
 </main>
 <dialog id="vehicleDialog"><form id="vehicleForm"><div class="dialog-head"><div><h2 id="dialogTitle">Register a vehicle</h2><p>Saved directly to the campus vehicles table.</p></div><button type="button" class="close-btn" id="closeDialog" aria-label="Close">×</button></div><label>Vehicle number<input name="vehicleNumber" maxlength="15" placeholder="e.g. KL 07 AB 1234" required></label><label>Owner name<input name="ownerName" maxlength="100" placeholder="Student or faculty name" required></label><div class="form-grid"><label>Owner category<select name="ownerCategory" required><option value="STUDENT">Student</option><option value="FACULTY">Faculty</option></select></label><label>Vehicle type<select name="vehicleType" required><option value="2-WHEELER">2-wheeler</option><option value="4-WHEELER">4-wheeler</option></select></label></div><div class="dialog-actions"><button type="button" class="secondary" id="cancelDialog">Cancel</button><button type="submit" class="primary" id="saveVehicle">Save vehicle</button></div></form></dialog>
 <div id="toast" class="toast" role="status"></div>
-<script src="assets/app.js"></script>
+<script src="assets/auth.js"></script><script src="assets/app.js"></script>
 </body></html>
