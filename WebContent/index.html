@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="context-path" content="/CampusPark">
+  <title>CampusPark | Parking operations</title><link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<aside class="sidebar">
+  <a class="brand" href="#overview"><span class="brand-icon">P</span><span>Campus<span class="brand-green">Park</span><small>COLLEGE PARKING</small></span></a>
+  <div class="nav-label">OPERATIONS</div>
+  <a class="nav active" href="#overview">▦ <span>Overview</span></a>
+  <a class="nav" href="#active">◉ <span>Active parking</span></a>
+  <a class="nav" href="#vehicles">▣ <span>Vehicles</span></a>
+  <a class="nav" href="#spaces">▤ <span>Parking spaces</span></a>
+  <a class="nav" href="#records">◷ <span>Parking history</span></a>
+  <div class="sidebar-bottom"><div class="help"><b>Connected to your campus DB</b><p>Occupancy and vehicle records are loaded from MySQL.</p><span id="sidebarDb" class="db-copy">Checking connection…</span></div><div class="profile"><div class="avatar">CP</div><div><b>Campus parking</b><small>Local administration</small></div></div></div>
+</aside>
+<main>
+  <header><div class="crumb">Campus operations <span>/</span> <b>Parking overview</b></div><div class="head-right"><span class="db-pill"><i id="dbDot"></i><span id="dbStatus">Connecting to MySQL</span></span><button class="iconbtn" id="refreshBtn" title="Refresh data" aria-label="Refresh data">↻</button></div></header>
+  <section class="page" id="overview">
+    <div class="welcome"><div><div class="eyebrow" id="today"></div><h1>Parking overview</h1><p>Live view of campus parking, registered vehicles and recent activity.</p></div><button class="primary" id="addVehicleBtn">＋ &nbsp;Register a vehicle</button></div>
+    <div id="errorBanner" class="error-banner" hidden></div>
+    <div class="stats">
+      <article class="stat"><div class="stat-top"><span>TOTAL PARKING SPACES</span><span class="stat-icon lime">▤</span></div><div class="value" id="totalSlots">—</div><div class="stat-note">Configured in parking_slots</div></article>
+      <article class="stat"><div class="stat-top"><span>AVAILABLE NOW</span><span class="stat-icon mint">⌖</span></div><div class="value" id="availableSlots">—</div><div class="stat-note">Across every vehicle group</div></article>
+      <article class="stat"><div class="stat-top"><span>VEHICLES PARKED</span><span class="stat-icon blue">▣</span></div><div class="value" id="parkedCount">—</div><div class="stat-note">Open parking records</div></article>
+      <article class="stat"><div class="stat-top"><span>REGISTERED VEHICLES</span><span class="stat-icon yellow">♧</span></div><div class="value" id="vehicleCount">—</div><div class="stat-note">From the vehicles table</div></article>
+    </div>
+    <div class="grid">
+      <section class="card" id="spaces"><div class="card-head"><div><h2>Space availability</h2><p>Real slot totals grouped by owner and vehicle type</p></div><span class="live-tag"><i></i> Live</span></div><div class="table-wrap"><table><thead><tr><th>OWNER CATEGORY</th><th>VEHICLE TYPE</th><th>TOTAL</th><th>OCCUPIED</th><th>AVAILABLE</th><th>OCCUPANCY</th></tr></thead><tbody id="summaryRows"><tr><td colspan="6" class="empty">Loading MySQL data…</td></tr></tbody></table></div></section>
+      <section class="card" id="active"><div class="card-head"><div><h2>Currently parked</h2><p>Vehicles with an open parking record</p></div><span class="count-badge" id="activeBadge">0</span></div><div id="activeList" class="active-list"><div class="empty">Loading active stays…</div></div></section>
+    </div>
+    <section class="card table-card" id="vehicles"><div class="card-head"><div><h2>Registered vehicles</h2><p>Add, update, park or release vehicles using your Java services</p></div><div class="table-actions"><label class="search">⌕ <input id="vehicleSearch" placeholder="Search number or owner…"></label><button class="secondary" id="vehicleAddBtn">＋ Add vehicle</button></div></div><div class="table-wrap"><table><thead><tr><th>VEHICLE NUMBER</th><th>OWNER</th><th>CATEGORY</th><th>VEHICLE TYPE</th><th>STATUS</th><th>ACTIONS</th></tr></thead><tbody id="vehicleRows"><tr><td colspan="6" class="empty">Loading vehicles…</td></tr></tbody></table></div><div class="table-bottom"><span id="vehicleTotal">0 vehicles</span><button class="text-button" id="clearVehicleSearch">Clear search</button></div></section>
+    <section class="card table-card lower-card" id="records"><div class="card-head"><div><h2>Parking history</h2><p>Entry and exit history from parking_records</p></div><label class="search">⌕ <input id="recordSearch" placeholder="Filter by vehicle number…"></label></div><div class="table-wrap"><table><thead><tr><th>VEHICLE NUMBER</th><th>PARKING SLOT</th><th>ENTRY TIME</th><th>EXIT TIME</th><th>STATE</th></tr></thead><tbody id="recordRows"><tr><td colspan="5" class="empty">Loading history…</td></tr></tbody></table></div></section>
+    <section class="card table-card lower-card"><div class="card-head"><div><h2>Parking slot inventory</h2><p>Each slot reflects the current occupancy flag in MySQL</p></div><div class="table-actions"><label class="search">⌕ <input id="slotSearch" placeholder="Search slot number…"></label><select id="slotFilter" class="select"><option value="all">All slots</option><option value="free">Available</option><option value="occupied">Occupied</option></select></div></div><div class="table-wrap slots-wrap"><table><thead><tr><th>SLOT</th><th>OWNER CATEGORY</th><th>VEHICLE TYPE</th><th>STATUS</th></tr></thead><tbody id="slotRows"><tr><td colspan="4" class="empty">Loading slots…</td></tr></tbody></table></div><div class="table-bottom"><span id="slotTotal">0 slots</span><span>Showing slots from parking_slots</span></div></section>
+    <footer>CampusPark <span>Connected to college_parking · MySQL</span></footer>
+  </section>
+</main>
+<dialog id="vehicleDialog"><form id="vehicleForm"><div class="dialog-head"><div><h2 id="dialogTitle">Register a vehicle</h2><p>Saved directly to the campus vehicles table.</p></div><button type="button" class="close-btn" id="closeDialog" aria-label="Close">×</button></div><label>Vehicle number<input name="vehicleNumber" maxlength="15" placeholder="e.g. KL 07 AB 1234" required></label><label>Owner name<input name="ownerName" maxlength="100" placeholder="Student or faculty name" required></label><div class="form-grid"><label>Owner category<select name="ownerCategory" required><option value="STUDENT">Student</option><option value="FACULTY">Faculty</option></select></label><label>Vehicle type<select name="vehicleType" required><option value="2-WHEELER">2-wheeler</option><option value="4-WHEELER">4-wheeler</option></select></label></div><div class="dialog-actions"><button type="button" class="secondary" id="cancelDialog">Cancel</button><button type="submit" class="primary" id="saveVehicle">Save vehicle</button></div></form></dialog>
+<div id="toast" class="toast" role="status"></div>
+<script src="assets/app.js"></script>
+</body></html>
