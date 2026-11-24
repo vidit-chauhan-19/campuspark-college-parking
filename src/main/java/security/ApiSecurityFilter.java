@@ -12,7 +12,7 @@ public class ApiSecurityFilter implements Filter {
   HttpServletRequest req=(HttpServletRequest)request; HttpServletResponse resp=(HttpServletResponse)response;
   String path=req.getPathInfo()==null?"/":req.getPathInfo();
   if(Boolean.FALSE.equals(req.getServletContext().getAttribute("campuspark.security.ready"))){send(resp,503,"Account security is not configured. Contact the administrator.");return;}
-  if("/health".equals(path)||path.startsWith("/auth/")){chain.doFilter(request,response);return;}
+  String requestPath=req.getRequestURI().substring(req.getContextPath().length()); if("/api/health".equals(requestPath)||requestPath.startsWith("/api/auth/")){chain.doFilter(request,response);return;}
   HttpSession session=req.getSession(false); AppAccount account=session==null?null:(AppAccount)session.getAttribute("campuspark.account");
   if(account==null){send(resp,401,"Please sign in to view parking information.");return;}
   String method=req.getMethod().toUpperCase(Locale.ROOT);
